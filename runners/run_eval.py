@@ -28,6 +28,7 @@ from runners.prompts import SYSTEM, build_user_prompt
 from runners.providers import get_provider
 from runners.providers.base import ProviderError, SpendCapExceeded
 from runners.slither_backend import analyze_contract
+from runners.triage import apply_triage, parse_llm_json
 from runners.tokens import count_tokens, encoding_name
 from scoring.match import Label, Prediction
 from scoring.metrics import cost_from_tokens, score
@@ -356,13 +357,12 @@ def main() -> int:
         )
         return 0
 
-    if system.get("kind") != "slither":
-        # Build the provider so the spend-cap and key checks are exercised, then
-        # refuse to start a paid/local-LLM sweep in this workstream.
-        defaults = models_cfg.get("defaults") or {}
-        cap = args.max_spend if args.max_spend is not None else float(defaults.get("max_spend_usd") or 15)
+    defaults = models_cfg.get("defaults") or {}
+    cap = args.max_spend if args.max_spend is not None else float(defaults.get("max_spend_usd") or 15)
+    use_llm = system.get("kind") != "slither"
+    provider = None
+    if use_llm:
         provider = get_provider(system["provider"], {"defaults": {**defaults, **system}}, prices)
-        # Touch the cap with a dummy estimate so a $0 cap would abort immediately.
         try:
             provider.assert_can_spend(0.0, cap, 0.0)
         except SpendCapExceeded as exc:
@@ -372,19 +372,19 @@ def main() -> int:
                 f"Refusing to run paid model {system_key!r}. Provider stubs are wired "
                 f"(env keys, hard cap ${cap:.2f}) but this workstream does not call paid APIs."
             )
-        raise SystemExit(
-            f"Refusing to run {system_key!r} here. The local Qwen/Ollama eval must run "
-            "on Solana's Mac (Ollama daemon + the exact model tag). "
-            "See the README 'Qwen local run' section."
-        )
+        if system["provider"] != "ollama":
+            raise SystemExit(f"unsupported LLM provider {system['provider']!r}")
 
-    run_id = args.run_id or datetime.now(DETROIT).strftime("slither-%Y%m%d-%H%M%S")
+    prefix = "slither" if not use_llm else system_key
+    run_id = args.run_id or datetime.now(DETROIT).strftime(f"{prefix}-%Y%m%d-%H%M%S")
     run_dir = args.run_dir or (ROOT / "results" / run_id)
     run_dir.mkdir(parents=True, exist_ok=True)
     raw_path = run_dir / "raw.jsonl"
 
-    print(f"run {run_id}: slither baseline on {len(manifest)} contracts", flush=True)
+    kind = "slither + " + system_key if use_llm else "slither baseline"
+    print(f"run {run_id}: {kind} on {len(manifest)} contracts", flush=True)
     raw_rows = []
+    spend = 0.0
     with raw_path.open("w", encoding="utf-8") as fh:
         for i, m in enumerate(manifest, 1):
             src = ROOT / m["path"]
@@ -405,19 +405,83 @@ def main() -> int:
                 "cost_usd": 0.0,
                 "input_tokens": 0,
                 "output_tokens": 0,
+                "llm_status": "skipped",
             }
+            if use_llm and result.status == "completed":
+                source_text = read_text(src)
+                prompt = build_user_prompt(
+                    m["contract_id"], source_text, result.findings, rec["solc_version"]
+                )
+                model_name = system.get("model")
+                alt = system.get("alt_model")
+                max_out = int(system.get("max_output_tokens") or defaults.get("max_output_tokens") or 1500)
+                try:
+                    completion = provider.complete(
+                        prompt,
+                        model=model_name,
+                        price_key=system.get("price_key") or system_key,
+                        spend_so_far=spend,
+                        cap=cap,
+                        max_output_tokens=max_out,
+                        system=SYSTEM,
+                        timeout=args.timeout,
+                    )
+                    rec["input_tokens"] = completion.input_tokens
+                    rec["output_tokens"] = completion.output_tokens
+                    rec["cost_usd"] = 0.0
+                    rec["latency_s"] = result.latency_s + completion.latency_s
+                    rec["llm_raw"] = completion.text
+                    rec["llm_model"] = completion.model
+                    parsed = parse_llm_json(completion.text)
+                    rec["findings"] = apply_triage(result.findings, parsed)
+                    rec["llm_status"] = "ok"
+                    rec["slither_findings"] = result.findings
+                except Exception as exc:  # noqa: BLE001
+                    # Keep Slither findings; record the failure honestly.
+                    rec["llm_status"] = "failed"
+                    rec["error"] = (rec.get("error") or "") + (("; " if rec.get("error") else "") + f"llm: {exc}")
+                    # If the preferred tag is missing, one retry with alt_model is allowed.
+                    if alt and model_name and "not found" in str(exc).lower():
+                        try:
+                            completion = provider.complete(
+                                prompt,
+                                model=alt,
+                                price_key=system.get("price_key") or system_key,
+                                spend_so_far=spend,
+                                cap=cap,
+                                max_output_tokens=max_out,
+                                system=SYSTEM,
+                                timeout=args.timeout,
+                            )
+                            rec["input_tokens"] = completion.input_tokens
+                            rec["output_tokens"] = completion.output_tokens
+                            rec["latency_s"] = result.latency_s + completion.latency_s
+                            rec["llm_raw"] = completion.text
+                            rec["llm_model"] = completion.model
+                            parsed = parse_llm_json(completion.text)
+                            rec["findings"] = apply_triage(result.findings, parsed)
+                            rec["llm_status"] = "ok"
+                            rec["slither_findings"] = result.findings
+                            rec["error"] = None
+                        except Exception as exc2:  # noqa: BLE001
+                            rec["llm_status"] = "failed"
+                            rec["error"] = f"llm: {exc2}"
             raw_rows.append(rec)
             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
             fh.flush()
-            if i % 10 == 0 or result.status != "completed":
-                print(f"  [{i}/{len(manifest)}] {m['contract_id']} {result.status} "
-                      f"findings={len(result.findings)} {result.latency_s:.1f}s "
-                      f"{(result.error or '')[:80]}", flush=True)
+            if i % 10 == 0 or result.status != "completed" or rec.get("llm_status") == "failed":
+                print(
+                    f"  [{i}/{len(manifest)}] {m['contract_id']} {result.status} "
+                    f"llm={rec.get('llm_status')} findings={len(rec['findings'])} "
+                    f"{rec['latency_s']:.1f}s {(rec.get('error') or '')[:80]}",
+                    flush=True,
+                )
 
     score_run(
         raw_rows, manifest, labels, pins, prices,
         run_dir=run_dir, run_id=run_id,
-        system_key=system_key, system_name="Slither only",
+        system_key=system_key,
+        system_name="Slither only" if not use_llm else f"Slither + {system_key}",
     )
     return 0
 

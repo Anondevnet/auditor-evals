@@ -2,7 +2,7 @@
 
 Reproducible evaluation harness for [Solana's contract auditor](../auditor-src): how much does an LLM add on top of Slither for labeled Solidity bugs?
 
-This repository is a **local** worktree (no GitHub remote). Datasets are public; pins and file SHA-256s live in `datasets/pins.json` and `datasets/manifest.jsonl`.
+Private companion repo to [Anondevnet/contract-auditor](https://github.com/Anondevnet/contract-auditor). Datasets are public; pins and file SHA-256s live in `datasets/pins.json` and `datasets/manifest.jsonl`. SolidiFI sources are not committed (no SPDX license); fetch them locally with `make fetch`.
 
 ## Dataset (v1, frozen)
 
@@ -26,14 +26,41 @@ make table RUN_DIR=results/<run_id>
 
 Paid models (`MODEL=gpt-6.1-sol`, `claude-sonnet-5.5`, `claude-haiku-5.5`, `gpt-6.1-terra`) are **stubbed**. They read `config/models.yaml` + `config/prices.yaml`, require env-var keys (`OPENAI_API_KEY` / `ANTHROPIC_API_KEY`, never hardcoded), and abort if a hard per-run spend cap would be exceeded. This workstream does not call paid APIs (`AUDITOR_EVALS_ALLOW_PAID` is unset).
 
-### Qwen local run (not executed here)
+### Qwen local run (Mac mini)
 
-Needs Solana's Mac, not this box:
+The Ollama provider is implemented (loopback only, $0). It is meant to run on Solana's Apple Silicon Mac mini (16 GB, Ollama already in use, Python 3.11 via pyenv). Do not run it against a paid API.
 
-1. Ollama running on `127.0.0.1:11434`.
-2. The exact tag from `config/models.yaml` (`huihui_ai/qwen3.5-abliterated:9b`, or record whatever `ollama list` shows — the auditor historically used `qwen3-8b-uncensored-16k:latest`).
-3. `AUDITOR_SRC` pointing at the auditor checkout, with the same Python 3.11 venv / slither / solc-select as the baseline.
-4. `make run MODEL=qwen-local`
+Copy-paste on the Mac, from a clone of this repo:
+
+```bash
+cd /path/to/auditor-evals
+chmod +x scripts/mac_qwen_run.sh
+
+# Optional, if the auditor checkout is not a sibling named contract-auditor / auditor-src:
+export AUDITOR_SRC=/path/to/contract-auditor
+
+# Check what is missing (never uses sudo; prints install hints and a runtime estimate):
+./scripts/mac_qwen_run.sh --check
+
+# Smoke test one contract, then the full 243-contract sweep (use tmux):
+./scripts/mac_qwen_run.sh --limit 1
+./scripts/mac_qwen_run.sh
+# equivalent: make run MODEL=qwen-local TIMEOUT=300
+```
+
+Prerequisites the script checks:
+
+| Check | Expected |
+|---|---|
+| Python | 3.11 on `PATH` as `python3.11` or `python3` (pyenv is fine) |
+| `AUDITOR_SRC` | checkout of `contract-auditor` (or the older `auditor-src` tree) containing `audit.py` |
+| Ollama | daemon answering on `127.0.0.1:11434` |
+| Model tag | `huihui_ai/qwen3.5-abliterated:9b` from `config/models.yaml`, or the historical alt `qwen3-8b-uncensored-16k:latest`. Record the exact `ollama list` tag. Missing tag: `ollama pull <tag>` (or pass `--pull`) |
+| slither / solc-select | used if already on `PATH`; otherwise the script pip-installs them into `./.venv` and installs solc `0.4.26 0.5.17 0.6.12 0.7.6 0.8.20 0.8.26` with `solc-select` (user prefix, no sudo) |
+
+The script creates `./.venv` inside the repo, never uses sudo, and refuses to talk to a non-loopback Ollama host.
+
+**Runtime estimate:** 243 contracts, ~2,644 input / ~1,204 output tokens each on average. A 9B Q4/Q5 model on a 16 GB M-series Mac is typically ~20–40 tok/s, or about 45–90 seconds per contract, so the full sweep is **about 3–6 hours** wall clock (budget 8 hours, run in tmux). Cost is $0. The script uses a 300s per-contract timeout because the slither-only default of 90s is too tight for a 9B generation.
 
 ## Results
 

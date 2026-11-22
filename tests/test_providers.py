@@ -55,15 +55,43 @@ def test_anthropic_refuses_similarly(monkeypatch):
                    spend_so_far=0, cap=15, max_output_tokens=10)
 
 
-def test_ollama_refuses_non_loopback_and_is_stubbed():
+def test_ollama_refuses_non_loopback():
     p = OllamaProvider({"defaults": {**CFG["defaults"], "endpoint": "https://example.com"}}, PRICES)
     with __import__("pytest").raises(Exception, match="not loopback"):
         p.complete("hi", model="qwen", price_key="qwen-local",
                    spend_so_far=0, cap=15, max_output_tokens=10)
+
+
+def test_ollama_loopback_uses_mocked_http(monkeypatch):
+    import json
+    import urllib.request
+
+    class _Resp:
+        def read(self):
+            return json.dumps({
+                "message": {"content": '{"triage":[],"new_findings":[]}'},
+                "prompt_eval_count": 12,
+                "eval_count": 4,
+            }).encode()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+    def fake_urlopen(req, timeout=None):
+        assert req.full_url.startswith("http://127.0.0.1:11434/")
+        return _Resp()
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
     p = OllamaProvider(CFG, PRICES)
-    with __import__("pytest").raises(Exception, match="stubbed"):
-        p.complete("hi", model="qwen", price_key="qwen-local",
+    c = p.complete("hi", model="qwen", price_key="qwen-local",
                    spend_so_far=0, cap=15, max_output_tokens=10)
+    assert c.cost_usd == 0.0
+    assert c.input_tokens == 12
+    assert c.output_tokens == 4
+    assert "triage" in c.text
 
 
 def test_estimate_cost():
