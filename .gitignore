@@ -1,0 +1,11 @@
+datasets/raw/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.python-version
+*.egg-info/
+
+# SolidiFI has no SPDX license; do not redistribute the injected contracts.
+# Fetch them locally with `python datasets/fetch.py` / `make fetch`.
+datasets/files/solidifi/

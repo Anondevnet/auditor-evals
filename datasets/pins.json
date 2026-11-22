@@ -1,0 +1,53 @@
+{
+  "commits": {
+    "SolidiFI-benchmark": {
+      "commit": "4b0573e1b3f7031396de6f48f7f3e7380222ad3a",
+      "license": "No SPDX; research use, cite Ghaleb & Pattabiraman, ISSTA 2020",
+      "recorded_at": "2026-11-14",
+      "ref": "master",
+      "upstream": "https://github.com/DependableSystemsLab/SolidiFI-benchmark",
+      "url": "https://github.com/smartbugs/SolidiFI-benchmark.git"
+    },
+    "smartbugs-curated": {
+      "commit": "230e649123477eff332742a59a1c7cc6dc286cab",
+      "license": "Apache-2.0 (contracts keep original licenses)",
+      "recorded_at": "2026-11-14",
+      "ref": "main",
+      "url": "https://github.com/smartbugs/smartbugs-curated.git"
+    },
+    "smartbugs-wild": {
+      "commit": "91ec17573d3e0f42cc7d4a6d2883b941901c26e5",
+      "license": "Apache-2.0",
+      "recorded_at": "2026-11-14",
+      "ref": "master",
+      "url": "https://github.com/smartbugs/smartbugs-wild.git"
+    }
+  },
+  "key_file_sha256": {
+    "SolidiFI-benchmark": {
+      "LICENSE": "0c1813a9f99f7bb49f88c6f102437dfd8bc8e44c232fc5e91d50a9b3cc0c1b01",
+      "README.md": "303880dc4729a36356197a3931a67bb082bbb46d8ff0e336924aedab27131d8c"
+    },
+    "smartbugs-curated": {
+      "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "versions.csv": "6bb1d0542e443533c730aefeb2ac7139e31b1c4955287a9df99e2d4d928b4570",
+      "vulnerabilities.json": "2a7c119406b1c56df6087fbfb041f5d3aacbb07a82ee350e2220b51f429646bc"
+    },
+    "smartbugs-wild": {
+      "LICENSE": "7382b1cf711e7a7c7af9816e0e07b49b91e7149b7c6d347225f98800fcb1f1c2",
+      "README.md": "d4bc82e3f6e6bdce4e8d7fb3751307fcbd743107f6ec3d0dbe367cca6612102c"
+    }
+  },
+  "manifest": {
+    "counts": {
+      "smartbugs-curated": 143,
+      "smartbugs-wild": 50,
+      "solidifi": 50,
+      "total": 243
+    },
+    "path": "datasets/manifest.jsonl",
+    "sha256": "abd2e7281bc361d2c4250d0ca443e506d319999a7a9bc00fe79acdf944b4cb76"
+  },
+  "recorded_at": "2026-11-14",
+  "sample_seed": 20261114
+}

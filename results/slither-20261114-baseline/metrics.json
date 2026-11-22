@@ -1,0 +1,405 @@
+{
+  "line": {
+    "precision": 0.22790697674418606,
+    "recall": 0.4927718416090509,
+    "f1": 0.3116676605048698,
+    "tp": 784,
+    "fp": 2656,
+    "fn": 807,
+    "micro": {
+      "precision": 0.22790697674418606,
+      "recall": 0.4927718416090509,
+      "f1": 0.3116676605048698
+    },
+    "macro": {
+      "precision": 0.2260894933479956,
+      "recall": 0.4438589254396582,
+      "f1": 0.25282048410045044
+    }
+  },
+  "contract": {
+    "precision": 0.2332155477031802,
+    "recall": 0.6839378238341969,
+    "f1": 0.34782608695652173,
+    "tp": 132,
+    "fp": 434,
+    "fn": 61,
+    "micro": {
+      "precision": 0.2332155477031802,
+      "recall": 0.6839378238341969,
+      "f1": 0.34782608695652173
+    },
+    "macro": {
+      "precision": 0.20565615511133603,
+      "recall": 0.5127822966507176,
+      "f1": 0.27471959563236753
+    }
+  },
+  "per_class_line": {
+    "reentrancy": {
+      "precision": 0.2524630541871921,
+      "recall": 0.9903381642512077,
+      "f1": 0.4023552502453385,
+      "tp": 205,
+      "fp": 607,
+      "fn": 2
+    },
+    "access_control": {
+      "precision": 0.1766497461928934,
+      "recall": 0.9354838709677419,
+      "f1": 0.2971818958155423,
+      "tp": 174,
+      "fp": 811,
+      "fn": 12
+    },
+    "arithmetic": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0,
+      "fp": 55,
+      "fn": 235
+    },
+    "unchecked_low_level_calls": {
+      "precision": 0.7747035573122529,
+      "recall": 0.4279475982532751,
+      "f1": 0.5513361462728552,
+      "tp": 196,
+      "fp": 57,
+      "fn": 262
+    },
+    "denial_of_service": {
+      "precision": 0.038461538461538464,
+      "recall": 0.14285714285714285,
+      "f1": 0.060606060606060615,
+      "tp": 1,
+      "fp": 25,
+      "fn": 6
+    },
+    "bad_randomness": {
+      "precision": 0.047619047619047616,
+      "recall": 0.0967741935483871,
+      "f1": 0.06382978723404256,
+      "tp": 3,
+      "fp": 60,
+      "fn": 28
+    },
+    "front_running": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": null,
+      "tp": 0,
+      "fp": 0,
+      "fn": 224
+    },
+    "time_manipulation": {
+      "precision": 0.5153061224489796,
+      "recall": 0.8451882845188284,
+      "f1": 0.6402535657686211,
+      "tp": 202,
+      "fp": 190,
+      "fn": 37
+    },
+    "short_addresses": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": null,
+      "tp": 0,
+      "fp": 0,
+      "fn": 1
+    },
+    "other": {
+      "precision": 0.00351288056206089,
+      "recall": 1.0,
+      "f1": 0.007001166861143525,
+      "tp": 3,
+      "fp": 851,
+      "fn": 0
+    }
+  },
+  "per_class_contract": {
+    "reentrancy": {
+      "precision": 0.3333333333333333,
+      "recall": 0.9473684210526315,
+      "f1": 0.4931506849315068,
+      "tp": 36,
+      "fp": 72,
+      "fn": 2
+    },
+    "access_control": {
+      "precision": 0.14615384615384616,
+      "recall": 0.76,
+      "f1": 0.24516129032258066,
+      "tp": 19,
+      "fp": 111,
+      "fn": 6
+    },
+    "arithmetic": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0,
+      "fp": 16,
+      "fn": 23
+    },
+    "unchecked_low_level_calls": {
+      "precision": 0.7631578947368421,
+      "recall": 0.8787878787878788,
+      "f1": 0.8169014084507042,
+      "tp": 58,
+      "fp": 18,
+      "fn": 8
+    },
+    "denial_of_service": {
+      "precision": 0.041666666666666664,
+      "recall": 0.16666666666666666,
+      "f1": 0.06666666666666667,
+      "tp": 1,
+      "fp": 23,
+      "fn": 5
+    },
+    "bad_randomness": {
+      "precision": 0.15,
+      "recall": 0.375,
+      "f1": 0.21428571428571425,
+      "tp": 3,
+      "fp": 17,
+      "fn": 5
+    },
+    "front_running": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": null,
+      "tp": 0,
+      "fp": 0,
+      "fn": 11
+    },
+    "time_manipulation": {
+      "precision": 0.1875,
+      "recall": 1.0,
+      "f1": 0.3157894736842105,
+      "tp": 12,
+      "fp": 52,
+      "fn": 0
+    },
+    "short_addresses": {
+      "precision": null,
+      "recall": 0.0,
+      "f1": null,
+      "tp": 0,
+      "fp": 0,
+      "fn": 1
+    },
+    "other": {
+      "precision": 0.0234375,
+      "recall": 1.0,
+      "f1": 0.04580152671755725,
+      "tp": 3,
+      "fp": 125,
+      "fn": 0
+    }
+  },
+  "fp_rate_clean": 0.78,
+  "findings_per_contract": 14.156378600823045,
+  "n_contracts": 243,
+  "n_clean": 50,
+  "n_findings": 3440,
+  "compile_failures": 0,
+  "latency_p50_s": 0.263906822015997,
+  "latency_p95_s": 1.085290657487348,
+  "cost_total": 0.0,
+  "cost_per_contract": 0.0,
+  "compile_failed_ids": [],
+  "n_clean_with_finding": 39,
+  "run_id": "slither-20261114-baseline",
+  "system": "slither",
+  "started_or_written_at": "2026-11-14T12:25:13-05:00",
+  "timezone": "America/Detroit",
+  "pins": {
+    "commits": {
+      "SolidiFI-benchmark": {
+        "commit": "4b0573e1b3f7031396de6f48f7f3e7380222ad3a",
+        "license": "No SPDX; research use, cite Ghaleb & Pattabiraman, ISSTA 2020",
+        "recorded_at": "2026-11-14",
+        "ref": "master",
+        "upstream": "https://github.com/DependableSystemsLab/SolidiFI-benchmark",
+        "url": "https://github.com/smartbugs/SolidiFI-benchmark.git"
+      },
+      "smartbugs-curated": {
+        "commit": "230e649123477eff332742a59a1c7cc6dc286cab",
+        "license": "Apache-2.0 (contracts keep original licenses)",
+        "recorded_at": "2026-11-14",
+        "ref": "main",
+        "url": "https://github.com/smartbugs/smartbugs-curated.git"
+      },
+      "smartbugs-wild": {
+        "commit": "91ec17573d3e0f42cc7d4a6d2883b941901c26e5",
+        "license": "Apache-2.0",
+        "recorded_at": "2026-11-14",
+        "ref": "master",
+        "url": "https://github.com/smartbugs/smartbugs-wild.git"
+      }
+    },
+    "key_file_sha256": {
+      "SolidiFI-benchmark": {
+        "LICENSE": "0c1813a9f99f7bb49f88c6f102437dfd8bc8e44c232fc5e91d50a9b3cc0c1b01",
+        "README.md": "303880dc4729a36356197a3931a67bb082bbb46d8ff0e336924aedab27131d8c"
+      },
+      "smartbugs-curated": {
+        "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "versions.csv": "6bb1d0542e443533c730aefeb2ac7139e31b1c4955287a9df99e2d4d928b4570",
+        "vulnerabilities.json": "2a7c119406b1c56df6087fbfb041f5d3aacbb07a82ee350e2220b51f429646bc"
+      },
+      "smartbugs-wild": {
+        "LICENSE": "7382b1cf711e7a7c7af9816e0e07b49b91e7149b7c6d347225f98800fcb1f1c2",
+        "README.md": "d4bc82e3f6e6bdce4e8d7fb3751307fcbd743107f6ec3d0dbe367cca6612102c"
+      }
+    },
+    "manifest": {
+      "counts": {
+        "smartbugs-curated": 143,
+        "smartbugs-wild": 50,
+        "solidifi": 50,
+        "total": 243
+      },
+      "path": "datasets/manifest.jsonl",
+      "sha256": "abd2e7281bc361d2c4250d0ca443e506d319999a7a9bc00fe79acdf944b4cb76"
+    },
+    "recorded_at": "2026-11-14",
+    "sample_seed": 20261114
+  },
+  "token_estimate": {
+    "tokenizer": "o200k_base",
+    "n_contracts": 243,
+    "avg_input_tokens": 2644.1111111111113,
+    "avg_output_tokens_estimated": 1204.0329218106997,
+    "spec_assumed_input": 6000.0,
+    "spec_assumed_output": 1500.0,
+    "p50_input": 1041,
+    "p95_input": 8205,
+    "max_input": 27486,
+    "min_input": 206,
+    "projections_usd": {
+      "gpt-6.1-sol": {
+        "measured_input_plus_estimated_output": {
+          "usd_per_contract": 0.017328,
+          "usd_one_pass": 4.210704,
+          "usd_three_runs": 12.632112,
+          "within_40": true
+        },
+        "measured_input_plus_estimated_output_batch50": {
+          "usd_per_contract": 0.008664,
+          "usd_one_pass": 2.105352,
+          "usd_three_runs": 6.316056,
+          "within_40": true
+        },
+        "spec_6k_1_5k": {
+          "usd_per_contract": 0.027,
+          "usd_one_pass": 6.561,
+          "usd_three_runs": 19.683,
+          "within_40": true
+        },
+        "spec_6k_1_5k_batch50": {
+          "usd_per_contract": 0.0135,
+          "usd_one_pass": 3.2805,
+          "usd_three_runs": 9.8415,
+          "within_40": true
+        }
+      },
+      "gpt-6.1-terra": {
+        "measured_input_plus_estimated_output": {
+          "usd_per_contract": 0.008664,
+          "usd_one_pass": 2.105352,
+          "usd_three_runs": 6.316056,
+          "within_40": true
+        },
+        "measured_input_plus_estimated_output_batch50": {
+          "usd_per_contract": 0.004332,
+          "usd_one_pass": 1.052676,
+          "usd_three_runs": 3.158028,
+          "within_40": true
+        },
+        "spec_6k_1_5k": {
+          "usd_per_contract": 0.0135,
+          "usd_one_pass": 3.2805,
+          "usd_three_runs": 9.8415,
+          "within_40": true
+        },
+        "spec_6k_1_5k_batch50": {
+          "usd_per_contract": 0.00675,
+          "usd_one_pass": 1.64025,
+          "usd_three_runs": 4.92075,
+          "within_40": true
+        }
+      },
+      "claude-sonnet-5.5": {
+        "measured_input_plus_estimated_output": {
+          "usd_per_contract": 0.022524000000000002,
+          "usd_one_pass": 5.473332000000001,
+          "usd_three_runs": 16.419996000000005,
+          "within_40": true
+        },
+        "measured_input_plus_estimated_output_batch50": {
+          "usd_per_contract": 0.011262000000000001,
+          "usd_one_pass": 2.7366660000000005,
+          "usd_three_runs": 8.209998000000002,
+          "within_40": true
+        },
+        "spec_6k_1_5k": {
+          "usd_per_contract": 0.0351,
+          "usd_one_pass": 8.5293,
+          "usd_three_runs": 25.587899999999998,
+          "within_40": true
+        },
+        "spec_6k_1_5k_batch50": {
+          "usd_per_contract": 0.01755,
+          "usd_one_pass": 4.26465,
+          "usd_three_runs": 12.793949999999999,
+          "within_40": true
+        }
+      },
+      "claude-haiku-5.5": {
+        "measured_input_plus_estimated_output": {
+          "usd_per_contract": 0.0011262,
+          "usd_one_pass": 0.2736666,
+          "usd_three_runs": 0.8209998,
+          "within_40": true
+        },
+        "measured_input_plus_estimated_output_batch50": {
+          "usd_per_contract": 0.0005631,
+          "usd_one_pass": 0.1368333,
+          "usd_three_runs": 0.4104999,
+          "within_40": true
+        },
+        "spec_6k_1_5k": {
+          "usd_per_contract": 0.001755,
+          "usd_one_pass": 0.42646500000000004,
+          "usd_three_runs": 1.279395,
+          "within_40": true
+        },
+        "spec_6k_1_5k_batch50": {
+          "usd_per_contract": 0.0008775,
+          "usd_one_pass": 0.21323250000000002,
+          "usd_three_runs": 0.6396975,
+          "within_40": true
+        }
+      }
+    },
+    "budget_usd": 40.0
+  },
+  "compile_failure_count": 0,
+  "slither_failure_count": 3,
+  "slither_failed_ids": [
+    "curated/reentrancy/reentrancy_bonus.sol",
+    "curated/reentrancy/reentrancy_cross_function.sol",
+    "curated/unchecked_low_level_calls/0x89c1b3807d4c67df034fffb62f3509561218d30b.sol"
+  ],
+  "timeout_count": 0,
+  "timeout_ids": [],
+  "other_failure_count": 0,
+  "other_failed_ids": [],
+  "status_counts": {
+    "completed": 240,
+    "slither_failed": 3
+  }
+}

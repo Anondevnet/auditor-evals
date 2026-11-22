@@ -1,0 +1,44 @@
+# Provider / model wiring. Secrets come from environment variables only.
+defaults:
+  max_spend_usd: 15.0          # hard cap per eval run (aborts before exceeding)
+  max_output_tokens: 1500
+  temperature: 0.0
+  allow_paid_env: AUDITOR_EVALS_ALLOW_PAID
+  openai_key_env: OPENAI_API_KEY
+  anthropic_key_env: ANTHROPIC_API_KEY
+  openai_base_url_env: OPENAI_BASE_URL
+systems:
+  slither:
+    kind: slither
+    description: Slither-only baseline (no LLM). Cost is always $0.
+  qwen-local:
+    kind: llm
+    provider: ollama
+    model: huihui_ai/qwen3.5-abliterated:9b
+    alt_model: qwen3-8b-uncensored-16k:latest
+    endpoint: http://127.0.0.1:11434
+    price_key: qwen-local
+    notes: >
+      Run on Solana's Mac against the local Ollama daemon. Record the exact
+      `ollama list` tag when the run happens. Not executed in the box
+      workstream.
+  gpt-6.1-sol:
+    kind: llm
+    provider: openai
+    model: gpt-6.1-sol
+    price_key: gpt-6.1-sol
+  gpt-6.1-terra:
+    kind: llm
+    provider: openai
+    model: gpt-6.1-terra
+    price_key: gpt-6.1-terra
+  claude-sonnet-5.5:
+    kind: llm
+    provider: anthropic
+    model: claude-sonnet-5.5
+    price_key: claude-sonnet-5.5
+  claude-haiku-5.5:
+    kind: llm
+    provider: anthropic
+    model: claude-haiku-5.5
+    price_key: claude-haiku-5.5

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/auditor-evals/labels/schema.json",
+  "title": "Auditor eval label row",
+  "description": "One row per expected finding (or a single clean-contract row).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "source",
+    "file_sha256",
+    "solc_version",
+    "label",
+    "vuln_class",
+    "lines",
+    "function",
+    "provenance",
+    "label_confidence"
+  ],
+  "properties": {
+    "contract_id": {
+      "type": "string",
+      "description": "Stable id, e.g. curated/reentrancy/0x01_reentrancy.sol"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["smartbugs-curated", "solidifi", "smartbugs-wild"]
+    },
+    "file_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "solc_version": {
+      "type": ["string", "null"],
+      "description": "solc version chosen from the file pragma (not Etherscan)."
+    },
+    "pragma": {
+      "type": ["string", "null"]
+    },
+    "label": {
+      "type": "string",
+      "enum": ["vulnerable", "clean"]
+    },
+    "vuln_class": {
+      "type": ["string", "null"],
+      "description": "DASP class, or null for clean contracts. 'other' is a SmartBugs leftover."
+    },
+    "lines": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 1}
+    },
+    "function": {
+      "type": ["string", "null"]
+    },
+    "provenance": {"type": "string"},
+    "label_confidence": {
+      "type": "string",
+      "enum": ["dataset", "manual"]
+    }
+  }
+}
