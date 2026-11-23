@@ -47,6 +47,9 @@ class OllamaProvider(Provider):
             "model": model,
             "messages": messages,
             "stream": False,
+            # Qwen 3.5 otherwise spends num_predict on hidden thinking and
+            # returns empty message.content (seen on the limit-1 smoke test).
+            "think": False,
             "options": {
                 "temperature": float(self.defaults.get("temperature") or 0.0),
                 "num_predict": int(max_output_tokens),

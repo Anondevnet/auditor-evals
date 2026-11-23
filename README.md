@@ -69,12 +69,14 @@ Slither-only baseline `results/slither-20261114-baseline`, run 2026-11-14 12:23 
 | System | Precision | Recall | F1 | FP rate (clean) | $/contract | p50 s | p95 s |
 |---|---|---|---|---|---|---|---|
 | Slither only | 0.228 | 0.493 | 0.312 | 0.780 | $0 | 0.26 | 1.09 |
-| + Qwen (local) | | | | | $0 | | |
+| + Qwen (local, huihui_ai/qwen3.5-abliterated:9b) | 0.233 | 0.496 | 0.317 | 0.680 | $0 | 58.01 | 106.05 |
 | + gpt-6.1-sol | | | | | | | |
 | + Claude Sonnet 5.5 | | | | | | | |
 | + Claude Haiku 5.5 | | | | | | | |
 
-Contract-level micro P/R/F1 = 0.233 / 0.684 / 0.348. Findings/contract: 14.16.
+Qwen run `results/qwen-local-20261122-174045` (2026-11-22, Mac mini, think=false): contract-level micro P/R/F1 = 0.252 / 0.658 / 0.365; 13.91 findings/contract. Honest read: Slither+Qwen is only marginally better than Slither alone (F1 0.317 vs 0.312; FP rate on clean 0.68 vs 0.78) while recall at contract level dropped (0.658 vs 0.684). 12/243 contracts failed to compile in this run (0 in the baseline) and are scored as zero findings; 3 Slither tool failures (same as baseline). Qwen added nothing on arithmetic (F1 0.054) or front_running (0).
+
+Slither-only contract-level micro P/R/F1 = 0.233 / 0.684 / 0.348. Findings/contract: 14.16.
 
 Compile failures: **0 / 243**. Slither tool failures: **3 / 243** (not dropped; scored as zero findings). All three compiled with solc 0.4.26; Slither 0.11.2 crashed (`AssertionError` in slithIR tuple assignment on `reentrancy_bonus.sol` and `reentrancy_cross_function.sol`; `NotConstant` on `0x89c1b3807d4c67df034fffb62f3509561218d30b.sol`).
 
