@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 from typing import Iterable, List, Optional, Sequence, Tuple
 
-_AUDITOR = Path(os.environ.get("AUDITOR_SRC", "/workspace/auditor-src"))
+_AUDITOR = Path(os.environ.get("AUDITOR_SRC", str(Path(__file__).resolve().parents[2] / "contract-auditor")))
 if _AUDITOR.is_dir() and str(_AUDITOR) not in sys.path:
     sys.path.insert(0, str(_AUDITOR))
 

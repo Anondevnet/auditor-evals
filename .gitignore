@@ -9,3 +9,6 @@ __pycache__/
 # SolidiFI has no SPDX license; do not redistribute the injected contracts.
 # Fetch them locally with `python datasets/fetch.py` / `make fetch`.
 datasets/files/solidifi/
+
+# Local run logs (machine-specific paths)
+results/*.log

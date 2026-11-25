@@ -19,7 +19,7 @@ systems:
     endpoint: http://127.0.0.1:11434
     price_key: qwen-local
     notes: >
-      Run on Solana's Mac against the local Ollama daemon. Record the exact
+      Run on an Apple Silicon Mac mini against the local Ollama daemon. Record the exact
       `ollama list` tag when the run happens. Not executed in the box
       workstream.
   gpt-6.1-sol:

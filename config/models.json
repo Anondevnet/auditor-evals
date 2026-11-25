@@ -20,7 +20,7 @@
       "alt_model": "qwen3-8b-uncensored-16k:latest",
       "endpoint": "http://127.0.0.1:11434",
       "price_key": "qwen-local",
-      "notes": "Must run on Solana's Mac against the local Ollama daemon. Record the exact `ollama list` tag when the run happens."
+      "notes": "Must run on an Apple Silicon Mac mini against the local Ollama daemon. Record the exact `ollama list` tag when the run happens."
     },
     "gpt-6.1-sol": {
       "kind": "llm",

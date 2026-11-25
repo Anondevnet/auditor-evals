@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/Anondevnet/auditor-evals/actions/workflows/ci.yml/badge.svg)](https://github.com/Anondevnet/auditor-evals/actions/workflows/ci.yml)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue)](.github/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 A reproducible harness that measures how much an LLM actually adds on top of Slither for finding labeled Solidity bugs, on a frozen 243-contract set (Slither alone: line-level F1 0.312; Slither + a local Qwen 9B: 0.317).
 
@@ -33,7 +34,7 @@ Sampling seed: `20261114`. Gold labels: `labels/*.jsonl` (schema in `labels/sche
 ## Quick start
 
 ```bash
-# Uses the auditor checkout at $AUDITOR_SRC (default /workspace/auditor-src)
+# Uses the auditor checkout at $AUDITOR_SRC (default: a sibling ../contract-auditor clone)
 make fetch                 # clone pinned commits, verify sha256, write manifest + labels
 make test
 make run MODEL=slither     # Slither-only baseline, $0, no API calls
@@ -44,7 +45,7 @@ Paid models (`MODEL=gpt-6.1-sol`, `claude-sonnet-5.5`, `claude-haiku-5.5`, `gpt-
 
 ### Qwen local run (Mac mini)
 
-The Ollama provider is implemented (loopback only, $0). It is meant to run on Solana's Apple Silicon Mac mini (16 GB, Ollama already in use, Python 3.11 via pyenv). Do not run it against a paid API.
+The Ollama provider is implemented (loopback only, $0). It is meant to run on an Apple Silicon Mac mini (16 GB) with a local Qwen 3.5 9B model via Ollama and Python 3.11 (pyenv is fine). Do not run it against a paid API.
 
 Copy-paste on the Mac, from a clone of this repo:
 
@@ -71,7 +72,7 @@ Prerequisites the script checks:
 | Python | 3.11 on `PATH` as `python3.11` or `python3` (pyenv is fine) |
 | `AUDITOR_SRC` | checkout of `contract-auditor` (or the older `auditor-src` tree) containing `audit.py` |
 | Ollama | daemon answering on `127.0.0.1:11434` |
-| Model tag | `huihui_ai/qwen3.5-abliterated:9b` from `config/models.yaml`, or the historical alt `qwen3-8b-uncensored-16k:latest`. Record the exact `ollama list` tag. Missing tag: `ollama pull <tag>` (or pass `--pull`) |
+| Model tag | the `model` tag in `config/models.yaml` (or its `alt_model`). Record the exact `ollama list` tag. Missing tag: `ollama pull <tag>` (or pass `--pull`) |
 | slither / solc-select | used if already on `PATH`; otherwise the script pip-installs them into `./.venv` and installs solc `0.4.26 0.5.17 0.6.12 0.7.6 0.8.20 0.8.26` with `solc-select` (user prefix, no sudo) |
 
 The script creates `./.venv` inside the repo, never uses sudo, and refuses to talk to a non-loopback Ollama host.
@@ -85,7 +86,7 @@ Slither-only baseline `results/slither-20261114-baseline`, run 2026-11-14 12:23 
 | System | Precision | Recall | F1 | FP rate (clean) | $/contract | p50 s | p95 s |
 |---|---|---|---|---|---|---|---|
 | Slither only | 0.228 | 0.493 | 0.312 | 0.780 | $0 | 0.26 | 1.09 |
-| + Qwen (local, huihui_ai/qwen3.5-abliterated:9b) | 0.233 | 0.496 | 0.317 | 0.680 | $0 | 58.01 | 106.05 |
+| + Qwen 3.5 9B (local, via Ollama) | 0.233 | 0.496 | 0.317 | 0.680 | $0 | 58.01 | 106.05 |
 | + gpt-6.1-sol | | | | | | | |
 | + Claude Sonnet 5.5 | | | | | | | |
 | + Claude Haiku 5.5 | | | | | | | |
@@ -127,4 +128,5 @@ results/<run_id>/{raw.jsonl,metrics.json,table.md}
 
 ## License / citation
 
+The harness code is MIT (see [LICENSE](LICENSE)); the datasets keep their own licenses:
 SmartBugs Curated and Wild are Apache-2.0 (contracts keep original licenses). SolidiFI has no SPDX license; research use, cite Ghaleb & Pattabiraman, ISSTA 2020. The injected SolidiFI contracts are **not** stored in this repository; run `make fetch` to clone the pinned commit locally. Do not republish Code4rena reports from this repo.

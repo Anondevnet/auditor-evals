@@ -1,6 +1,6 @@
 PYTHON ?= python3
-# Default to the box checkout; on a Mac export AUDITOR_SRC to the contract-auditor clone.
-AUDITOR_SRC ?= $(shell if [ -d /workspace/auditor-src ]; then echo /workspace/auditor-src; elif [ -d ../contract-auditor ]; then (cd ../contract-auditor && pwd); else echo /workspace/auditor-src; fi)
+# Default to a sibling contract-auditor clone; export AUDITOR_SRC to use another checkout.
+AUDITOR_SRC ?= $(abspath $(CURDIR)/../contract-auditor)
 TIMEOUT ?= 90
 EXTRA_ARGS ?=
 export AUDITOR_SRC

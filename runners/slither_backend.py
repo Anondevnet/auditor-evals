@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 
-AUDITOR_SRC = Path(os.environ.get("AUDITOR_SRC", "/workspace/auditor-src"))
+AUDITOR_SRC = Path(os.environ.get("AUDITOR_SRC", str(Path(__file__).resolve().parents[2] / "contract-auditor")))
 if str(AUDITOR_SRC) not in sys.path:
     sys.path.insert(0, str(AUDITOR_SRC))
 
