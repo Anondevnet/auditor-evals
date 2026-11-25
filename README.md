@@ -1,8 +1,24 @@
 # auditor-evals
 
-Reproducible evaluation harness for [Solana's contract auditor](../auditor-src): how much does an LLM add on top of Slither for labeled Solidity bugs?
+[![CI](https://github.com/Anondevnet/auditor-evals/actions/workflows/ci.yml/badge.svg)](https://github.com/Anondevnet/auditor-evals/actions/workflows/ci.yml)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue)](.github/workflows/ci.yml)
 
-Private companion repo to [Anondevnet/contract-auditor](https://github.com/Anondevnet/contract-auditor). Datasets are public; pins and file SHA-256s live in `datasets/pins.json` and `datasets/manifest.jsonl`. SolidiFI sources are not committed (no SPDX license); fetch them locally with `make fetch`.
+A reproducible harness that measures how much an LLM actually adds on top of Slither for finding labeled Solidity bugs, on a frozen 243-contract set (Slither alone: line-level F1 0.312; Slither + a local Qwen 9B: 0.317).
+
+Companion repo to [Anondevnet/contract-auditor](https://github.com/Anondevnet/contract-auditor). Datasets are public; pins and file SHA-256s live in `datasets/pins.json` and `datasets/manifest.jsonl`. SolidiFI sources are not committed (no SPDX license); fetch them locally with `make fetch`.
+
+## Quickstart
+
+Offline, $0, no API keys. Rebuilds the committed Slither baseline table from its raw results:
+
+```bash
+git clone https://github.com/Anondevnet/auditor-evals && cd auditor-evals
+python3.11 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+make test
+make table RUN_DIR=results/slither-20261114-baseline   # rewrites results/<run>/table.md from raw.jsonl
+```
+
+Fresh runs (`make fetch`, `make run MODEL=slither`) need a [contract-auditor](https://github.com/Anondevnet/contract-auditor) checkout; see [Quick start](#quick-start).
 
 ## Dataset (v1, frozen)
 
