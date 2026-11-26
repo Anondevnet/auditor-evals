@@ -21,6 +21,12 @@ make table RUN_DIR=results/slither-20261114-baseline   # rewrites results/<run>/
 
 Fresh runs (`make fetch`, `make run MODEL=slither`) need a [contract-auditor](https://github.com/Anondevnet/contract-auditor) checkout; see [Quick start](#quick-start).
 
+## Demo
+
+Offline tests and rebuilding the committed Slither baseline table from raw results (no API keys):
+
+![pytest and the Slither-only baseline table](docs/demo.gif)
+
 ## Dataset (v1, frozen)
 
 | Source | Pin | n | Role |
